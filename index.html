@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bootcamp Registration</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Firebase App (the core Firebase SDK) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <!-- Firestore -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="hero">
+    <svg class="wavy-banner" viewBox="0 0 1440 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,40 Q360,70 720,40 T1440,40 V70 H0 Z" fill="#39ff90"/>
+    </svg>
+    <div class="date-badge"><span>3 Weeks</span><span>Starts August 2025</span></div>
+    <div class="hero-content">
+      <!-- <div class="event-date">June 15th, 2024</div> -->
+      <div class="event-title">Kingdom Life Chapel Tech BOOTCAMP <span class="accent">2025</span></div>
+      <div class="track-bubbles">
+        <span class="accent-bubble">Web Development</span>
+        <span class="accent-bubble">Mobile Development</span>
+        <span class="accent-bubble">Product Design</span>
+        <span class="accent-bubble">Machine Learning</span>
+        <span class="accent-bubble">Data Analysis</span>
+      </div>
+      <div class="event-desc">
+        Whether you are just starting out in tech, or don't even know which field to dive into, or even if you are into a tech field, this event is for you.
+      </div>
+      <a href="#register" class="cta-btn">Register Now</a>
+    </div>
+    <svg class="wavy-banner-bottom" viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,20 Q360,0 720,20 T1440,20 V60 H0 Z" fill="#ffe600"/>
+    </svg>
+  </div>
+  <div class="main-content">
+    <div class="container" id="register">
+      <h2>Register for the Bootcamp</h2>
+      <form id="registrationForm">
+        <label for="name">Name</label>
+        <input type="text" id="name" required>
+
+        <label for="email">Email</label>
+        <input type="email" id="email" required>
+
+        <label for="track">Select Track</label>
+        <div class="custom-dropdown" id="customDropdown" tabindex="0">
+          <div class="dropdown-selected" id="dropdownSelected">-- Select a track --</div>
+          <div class="dropdown-options" id="dropdownOptions">
+            <div class="dropdown-option" data-value="Web Development">Web Development</div>
+            <div class="dropdown-option" data-value="Mobile Development">Mobile Development</div>
+            <div class="dropdown-option" data-value="Product Design">Product Design</div>
+            <div class="dropdown-option" data-value="Machine Learning">Machine Learning</div>
+            <div class="dropdown-option" data-value="Data Analysis">Data Analysis</div>
+            <div class="dropdown-option" data-value="Others">Others</div>
+          </div>
+          <input type="hidden" id="track" name="track" required>
+        </div>
+
+        <button type="submit">Register</button>
+      </form>
+      <div class="success" id="successMsg" style="display:none;">Registration successful!</div>
+      <div class="error" id="errorMsg" style="display:none;"></div>
+    </div>
+  </div>
+  <script>
+    // Your Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyCi98QvvAmvwwIpNRRYVciSoezJufDptpE",
+      authDomain: "klc-bootcamp-landingpage.firebaseapp.com",
+      projectId: "klc-bootcamp-landingpage",
+      storageBucket: "klc-bootcamp-landingpage.firebasestorage.app",
+      messagingSenderId: "210449762967",
+      appId: "1:210449762967:web:096be01ac39fd5d8f677d2",
+      measurementId: "G-Y5R77P4MNG"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    // Form submission handler
+    document.getElementById('registrationForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const track = document.getElementById('track').value;
+      // Hide previous messages
+      document.getElementById('successMsg').style.display = 'none';
+      document.getElementById('errorMsg').style.display = 'none';
+      try {
+        await db.collection('registrations').add({
+          name,
+          email,
+          track,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        document.getElementById('registrationForm').reset();
+        document.getElementById('successMsg').style.display = 'block';
+      } catch (error) {
+        document.getElementById('errorMsg').textContent = 'Error: ' + error.message;
+        document.getElementById('errorMsg').style.display = 'block';
+      }
+    });
+
+    // Custom dropdown logic
+    const customDropdown = document.getElementById('customDropdown');
+    const dropdownSelected = document.getElementById('dropdownSelected');
+    const dropdownOptions = document.getElementById('dropdownOptions');
+    const dropdownOptionEls = dropdownOptions.querySelectorAll('.dropdown-option');
+    const trackInput = document.getElementById('track');
+    let dropdownOpen = false;
+
+    function closeDropdown() {
+      dropdownOptions.style.display = 'none';
+      dropdownOpen = false;
+      customDropdown.classList.remove('open');
+    }
+    function openDropdown() {
+      dropdownOptions.style.display = 'block';
+      dropdownOpen = true;
+      customDropdown.classList.add('open');
+    }
+    customDropdown.addEventListener('click', function(e) {
+      if (dropdownOpen) {
+        closeDropdown();
+      } else {
+        openDropdown();
+      }
+    });
+    dropdownOptionEls.forEach(option => {
+      option.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const value = this.getAttribute('data-value');
+        dropdownSelected.textContent = value;
+        trackInput.value = value;
+        closeDropdown();
+      });
+    });
+    document.addEventListener('click', function(e) {
+      if (!customDropdown.contains(e.target)) {
+        closeDropdown();
+      }
+    });
+    customDropdown.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        if (dropdownOpen) {
+          closeDropdown();
+        } else {
+          openDropdown();
+        }
+      }
+      if (e.key === 'Escape') {
+        closeDropdown();
+      }
+    });
+  </script>
+</body>
+</html> 
