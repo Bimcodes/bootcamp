@@ -278,14 +278,14 @@ button[type="submit"]:hover {
     padding: 0.6em 1.5em;
   }
   .date-badge {
-    position: static;
-    transform: none;
-    margin: 0 auto 24px auto;
-    display: flex;
+    right: 2vw;
     width: 90px;
     height: 90px;
     font-size: 0.95rem;
     padding: 0.3em;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
   }
 }
 @media (max-width: 600px) {
@@ -316,6 +316,16 @@ button[type="submit"]:hover {
     left: 12px;
     height: 48px;
     max-width: 80px;
+  }
+  .date-badge {
+    right: 2vw;
+    width: 70px;
+    height: 70px;
+    font-size: 0.85rem;
+    padding: 0.2em;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
   }
 } 
 .custom-dropdown {

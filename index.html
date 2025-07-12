@@ -65,6 +65,10 @@
       <div class="success" id="successMsg" style="display:none;">Registration successful!</div>
       <div class="error" id="errorMsg" style="display:none;"></div>
     </div>
+    <div class="container" id="afterRegisterMsg" style="display:none; text-align:center; font-size:1.3em; font-weight:600; color:#39ff90;">
+      Registration successful, see you there!<br>
+      <span style="display:block; margin-top:0.7em; font-size:0.95em; color:#fff; font-weight:400;">Keep checking your mail for the venue and other details.</span>
+    </div>
   </div>
   <script>
     // Your Firebase config
@@ -97,7 +101,8 @@
           timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
         document.getElementById('registrationForm').reset();
-        document.getElementById('successMsg').style.display = 'block';
+        document.getElementById('register').style.display = 'none';
+        document.getElementById('afterRegisterMsg').style.display = 'block';
       } catch (error) {
         document.getElementById('errorMsg').textContent = 'Error: ' + error.message;
         document.getElementById('errorMsg').style.display = 'block';
