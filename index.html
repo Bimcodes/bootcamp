@@ -16,7 +16,7 @@
     <svg class="wavy-banner" viewBox="0 0 1440 70" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M0,40 Q360,70 720,40 T1440,40 V70 H0 Z" fill="#39ff90"/>
     </svg>
-    <div class="date-badge"><span>3 Weeks</span><span>Starts August 2025</span></div>
+    <div class="date-badge"><span>3 Weeks</span><span>Starts 18th August 2025</span></div>
     <div class="hero-content">
       <!-- <div class="event-date">June 15th, 2024</div> -->
       <div class="event-title">Kingdom Life Chapel Tech BOOTCAMP <span class="accent">2025</span></div>
@@ -26,6 +26,8 @@
         <span class="accent-bubble">Product Design</span>
         <span class="accent-bubble">Machine Learning</span>
         <span class="accent-bubble">Data Analysis</span>
+        <span class="accent-bubble">Graphics Design</span>
+
       </div>
       <div class="event-desc">
         Whether you are just starting out in tech, or don't even know which field to dive into, or even if you are into a tech field, this event is for you.
@@ -46,6 +48,9 @@
         <label for="email">Email</label>
         <input type="email" id="email" required>
 
+        <label for="phone">Phone</label>
+        <input type="tel" id="phone" required>
+
         <label for="track">Select Track</label>
         <div class="custom-dropdown" id="customDropdown" tabindex="0">
           <div class="dropdown-selected" id="dropdownSelected">-- Select a track --</div>
@@ -55,7 +60,8 @@
             <div class="dropdown-option" data-value="Product Design">Product Design</div>
             <div class="dropdown-option" data-value="Machine Learning">Machine Learning</div>
             <div class="dropdown-option" data-value="Data Analysis">Data Analysis</div>
-            <div class="dropdown-option" data-value="Others">Others</div>
+            <div class="dropdown-option" data-value="Graphics Design">Graphics Design</div>
+           
           </div>
           <input type="hidden" id="track" name="track" required>
         </div>
@@ -89,6 +95,7 @@
       e.preventDefault();
       const name = document.getElementById('name').value.trim();
       const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
       const track = document.getElementById('track').value;
       // Hide previous messages
       document.getElementById('successMsg').style.display = 'none';
@@ -97,6 +104,7 @@
         await db.collection('registrations').add({
           name,
           email,
+          phone,
           track,
           timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
